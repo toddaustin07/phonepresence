@@ -34,4 +34,4 @@ This parameter specifies the number of times that a phone is pinged, but without
 As an example, 7 retries at 12 second intervals results in a 1 minute 24 second period until a phone is declared away.
 
 ## Please report your experience!
-Use the github Issues tab for this repository to share your findings.  I'm also interested to see how this works with Android phones.
+Use the github Issues (https://github.com/toddaustin07/phonepresence/issues) tab for this repository to share your findings.  I'm also interested to see how this works with Android phones.
