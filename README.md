@@ -35,3 +35,8 @@ As an example, 7 retries at 12 second intervals results in a 1 minute 24 second 
 
 ## Please report your experience!
 Use the github Issues (https://github.com/toddaustin07/phonepresence/issues) tab for this repository to share your findings.  I'm also interested to see how this works with Android phones.
+
+## SmartThings Integration
+An alternate version of this application is available that will allow for full integration with SmartThings.  It requires my bridge server (https://github.com/toddaustin07/edgebridge) and LAN Presence Edge driver available at this test channel: https://api.smartthings.com/invitation-web/accept?id=8f025878-71e3-4bb4-bbac-5dd37b1a27eb
+
+Note that the configuration file for this alternate version contains additional settings, of which the *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.
