@@ -1,11 +1,11 @@
 # phonetrack application
 
-This Python script uses a technique, borrowed from here => https://github.com/mudape/iphonedetect, to track presence of iPhones on the home network.  On a periodic basis (every 12 seconds, for example) it sends a UDP message to port 5353 (mDNS) of the phone's IP address to try and force the mobile phone to renew its existance on local network tables.  The application then examines the local ARP table to see if the phone's ip address is present.  If it is, it is presumed present. If it is not, a number of retries are attempted (e.g. 10) before declaring the phone not present.  
+This Python script uses a technique, borrowed from here => https://github.com/mudape/iphonedetect, to track presence of iPhones on the home network.  On a periodic basis (every 12 seconds, for example) it sends a UDP message to port 5353 (mDNS) of the mobile phone's IP address to try and force the phone to renew its existance on local network address tables.  The script then examines the local ARP table (via IP commands) to see if the phone's ip address is included.  If it is, it is presumed present. If it is not, a number of subsequent retries are attempted (e.g. 5-10) before declaring the phone not present.  
 
 ## Known Issues
-With the latest iOS (version 15), this technique has proven unreliable.  A large number of retries is required to ensure false not-present states are not reported, which can take up to 2 minutes.  Worse, upon arrival of an iPhone that is asleep, detection may not occur until the iPhone is woken up by the user.
+With the latest iOS (version 15), this technique has proven unreliable.  A large number of retries (perhaps 10) is required to ensure false away-states are not reported, which can take up to 2 minutes or more.  More critically, upon arrival of an iPhone that is asleep, detection may not occur until the iPhone is woken up by the user.
 
-The above is my personal experience running this test app on a Raspberry Pi 4 with Raspbian OS (Linux kernal 5.10.17-v7l+) and with iPhone 12s with iOS 15.1.1
+The above is *my* personal experience running this test app on a Raspberry Pi 4 with Raspbian OS (Linux kernal 5.10.17-v7l+) and with iPhone 12s with iOS 15.1.1.  However, others should try this to see if their results are similar.
 
 ## Try it yourself
 
@@ -22,7 +22,7 @@ In addition to the messages displayed on stdout, entries are also saved to a log
 #### What to look for
 The key info to be monitored in the console output or log file is the 'Not present count' message.  The fewer times this is seen, the better.  Sequential counts of 5 or more while the iPhone is actually at home indicate that the iPhone is not being detected on the network.  
 
-### Configuration File
+### Configuration File (phonetrack.cfg)
 The phonetrack.cfg file where the phone IP address and friendly names are configured also has the following parameters used by the program and can be tweaked to determine how they might impact the accuracy and responsiveness of the tracking:
 - ping_interval = 12
 
@@ -34,4 +34,4 @@ This parameter specifies the number of times that a phone is pinged, but without
 As an example, 7 retries at 12 second intervals results in a 1 minute 24 second period until a phone is declared away.
 
 ## Please report your experience!
-Use the Issues feature to share your findings.  I'm also interested to see how this works with Android phones.
+Use the github Issues tab for this repository to share your findings.  I'm also interested to see how this works with Android phones.
