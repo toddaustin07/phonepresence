@@ -3,11 +3,13 @@
 This Python script uses a technique, borrowed from here => https://github.com/mudape/iphonedetect, to track presence of iPhones on the home network.  On a periodic basis (every 12 seconds, for example) it sends a UDP message to port 5353 (mDNS) of the mobile phone's IP address to try and force the phone to renew its existence on local network address tables.  The script then examines the local ARP table (via IP commands) to see if the phone's IP address is included.  If it is, it is presumed present. If it is not, a number of subsequent retries are attempted (e.g. 5-10) before declaring the phone not present.  
 
 ## Known Issues
-With the latest iOS (version 15), this technique has proven unreliable.  A large number of retries (perhaps 10) is required to ensure false away-states are not reported, which can take up to 2 minutes or more.  More critically, upon arrival of an iPhone that is asleep, detection may not occur until the iPhone is woken up by the user.
+With the latest iOS (version 15), this technique is not 100% reliable.  A number of retries (configurable) may be required to ensure false away-states are not reported, which can result in true not-present reports to take up to 2 minutes or more.  More critically, upon arrival of an iPhone that is asleep, in some cases detection may not occur until the iPhone is woken up by the user.
 
-The above is *my* personal experience running this test app on a Raspberry Pi 4 with Raspbian OS (Linux kernal 5.10.17-v7l+) and with iPhone 12s with iOS 15.1.1.  However, others should try this to see if their results are similar.
+## Two versions available
+If you want to try the phone monitoring without connecting to SmartThings, you can use the standalone version of the application in the root directory.
+If you want a setup where you have SmartThings presence devices that get phone tracking updates, then use the application in the SmartThingsIntegration folder.
 
-## Try it yourself
+## Standalone version
 
 - Download phonetrack.py and phonetrack.cfg onto a computer (Linux, Windows, Mac) with Python 3.7 or later.
 - Edit the phonetrack.cfg file to specify your phone IP address(es) (should be static); also include short friendly names for each phone (no spaces or special characters)
@@ -39,4 +41,4 @@ Use the github Issues (https://github.com/toddaustin07/phonepresence/issues) tab
 ## SmartThings Integration
 An alternate version of this application is available that will allow for full integration with SmartThings.  It requires my bridge server (https://github.com/toddaustin07/edgebridge) and LAN Presence Edge driver available at this test channel: https://api.smartthings.com/invitation-web/accept?id=8f025878-71e3-4bb4-bbac-5dd37b1a27eb
 
-Note that the configuration file for this alternate version contains additional settings, of which the *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.
+Note that the configuration file for this alternate version contains additional settings, of which the *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.  The config file also allows for turning on or off console or file logging: simply change the respective configuration line to a 'yes' or 'no'.
