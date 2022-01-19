@@ -38,9 +38,11 @@ PINGINTERVAL = 12
 
 class logger(object):
 	
-	def __init__(self, tofile, fname, append):
+	def __init__(self, toconsole, tofile, fname, append):
 	
+		self.toconsole = toconsole
 		self.savetofile = tofile
+		
 		if tofile:
 			self.filename = fname
 			if not append:
@@ -56,7 +58,8 @@ class logger(object):
 	
 	def __outputmsg(self, colormsg, plainmsg):
 		
-		print (colormsg)
+		if self.toconsole:
+			print (colormsg)
 		if self.savetofile:
 			self.__savetofile(plainmsg)
 	
@@ -195,10 +198,11 @@ class httprequest(object):
 				
 			except OSError as error:
 				if OSError != errno.EADDRINUSE:
-					oksent = True
+					log.error (error)
 				else:
 					log.error ("Address already in use; retrying")
-					time.sleep(.250)
+				
+				time.sleep(.250)
 			else:
 				oksent = True
 
@@ -234,8 +238,19 @@ if not parser.read(CONFIG_FILE_PATH):
 	print (f'\nConfig file is missing ({CONFIG_FILE_PATH})\n')
 	exit(-1)
 	
-LOGFILE = parser.get('config', 'logfile')
-log = logger(True, LOGFILE, False)
+if parser.get('config', 'console_output').lower() == 'yes':
+	conoutp = True	
+else:
+	conoutp = False
+
+if parser.get('config', 'logfile_output').lower() == 'yes':
+	logoutp = True
+	LOGFILE = parser.get('config', 'logfile')
+else:
+	logoutp = False
+	LOGFILE = ''
+	
+log = logger(conoutp, logoutp, LOGFILE, False)
 
 phonelist = parser.get('config', 'phone_ips')
 namelist = parser.get('config', 'phone_names')
