@@ -30,7 +30,7 @@ SCANTYPE_ARP = 2
 SCANTYPE_NONE = -1
 
 CONFIGFILE = 'phonetrack.cfg'
-LOGFILE = './phonetrack.log'
+LOGFILE = 'phonetrack.log'
 DEVICE_LIST = []
 NOTPRESENT_RETRIES = 5
 PINGINTERVAL = 12
