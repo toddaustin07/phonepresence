@@ -42,6 +42,10 @@ class logger(object):
 	
 		self.toconsole = toconsole
 		self.savetofile = tofile
+
+		self.os = platform.system()
+		if self.os == 'Windows':
+			os.system('color')
 		
 		if tofile:
 			self.filename = fname
@@ -131,7 +135,7 @@ class mobilescanner(object):
 			self.tracktype = SCANTYPE_IP
 		elif subprocess.run(f"{cmd} arp", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
 			log.info("Using 'ARP' to find tracked devices")
-			self.tracktype = SCANTYPE_IP
+			self.tracktype = SCANTYPE_ARP
 		else:
 			log.error("IP or ARP commands not available on this computer")
 			return False
@@ -147,9 +151,9 @@ class mobilescanner(object):
 		
 	def find_with_arp(self):
 		# Queries the arp table and lists found IP's
-		cmd = "arp -na"
-		neighbors = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-		return [_.split()[1][1:-1] for _ in neighbors.stdout.splitlines() if _.count(":") == 5]
+		cmd = "arp -a".split()
+		neighbors = subprocess.run(cmd, shell=False, capture_output=True, text=True)
+		return [_.split()[0] for _ in neighbors.stdout.splitlines() if _.count(".") == 3]
 
 	def scan(self):
 		if self.tracktype == SCANTYPE_IP:
