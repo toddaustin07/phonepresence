@@ -102,9 +102,12 @@ class mobiledevice(object):
 		MESSAGE = b"Marco"
 		MESSAGE_PORT = 5353
 
-		with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-			s.settimeout(1)
-			s.sendto(MESSAGE, (self.ipaddress, MESSAGE_PORT))
+		try:
+			with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+				s.settimeout(1)
+				s.sendto(MESSAGE, (self.ipaddress, MESSAGE_PORT))
+		except Exception as e:
+				log.error (f"Failed to reach {self.name}'s cellphone: {e}")
 
 	def update_presence(self, present):
 		
