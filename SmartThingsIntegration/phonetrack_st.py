@@ -79,11 +79,11 @@ class logger(object):
 		colormsg = f'\033[33m{time.strftime("%c")}  \033[91m{msg}\033[0m'
 		self.__outputmsg(colormsg, msg)
 		
-	def imp(self, msg):
+	def hilite(self, msg):
 		colormsg = f'\033[33m{time.strftime("%c")}  \033[97m{msg}\033[0m'
 		self.__outputmsg(colormsg, msg)
 		
-	def triv(self, msg):
+	def debug(self, msg):
 		colormsg = f'\033[33m{time.strftime("%c")}  \033[37m{msg}\033[0m'
 		self.__outputmsg(colormsg, msg)
 		
@@ -94,7 +94,7 @@ class mobiledevice(object):
 		
 		self.ipaddress = ipaddr
 		self.name = name
-		self.present = False
+		self.present = 'unknown'
 		self.notpresentcounter = 0
 
 	def ping(self):
@@ -218,7 +218,7 @@ class httprequest(object):
 
 def presence_changed(requestor, phone):
 	
-	log.imp (f'{phone.name} Presence changed to = {phone.ispresent()}')
+	log.hilite (f'{phone.name} Presence changed to = {phone.ispresent()}')
 	
 	BASEURL = f'http://{BRIDGEADDR}'
 
@@ -300,7 +300,7 @@ if scanner.setup():
 				
 				else:
 					device.notpresentcounter += 1
-					log.triv (f'\t{device.name}: Not present count = {device.notpresentcounter}')
+					log.debug (f'\t{device.name}: Not present count = {device.notpresentcounter}')
 					
 					if device.notpresentcounter >= NOTPRESENT_RETRIES:
 						device.update_presence(False)
