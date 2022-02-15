@@ -46,7 +46,7 @@ It also requires **Python 3.7** or later to be on the computer where you will be
 ### phonetrack.cfg
 Note that the configuration file for this alternate version contains additional settings.  
 
-- As of 2/14/22, network presence retries can be configured **per phone**
+- As of 2/14/22, network presence retries are configured **per phone**
 - The *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.  
 - The config file also allows for turning on or off console or file logging: simply change the respective configuration line to a 'yes' or 'no'.
 
