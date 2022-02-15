@@ -44,10 +44,17 @@ An alternate version of this application is available that will allow for full i
 It also requires **Python 3.7** or later to be on the computer where you will be running the phonetrack application.  If a Windows .exe file is preferred, please contact me and I can provide that.
 
 ### phonetrack.cfg
-Note that the configuration file for this alternate version contains additional settings, of which the *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.  The config file also allows for turning on or off console or file logging: simply change the respective configuration line to a 'yes' or 'no'.
+Note that the configuration file for this alternate version contains additional settings.  
+
+- As of 2/14/22, network presence retries can be configured **per phone**
+- The *bridge_address* value **must** be configured along with the phone IP addresses and names as outlined in the instructions above.  
+- The config file also allows for turning on or off console or file logging: simply change the respective configuration line to a 'yes' or 'no'.
 
 ### SmartThings device settings
 The LAN Presence Edge driver, when installed on your hub, will create a LAN Presence device when an Add device / Scan nearby operation is done in the SmartThings mobile app.  Once that device is created, its device settings must be configured as follows:
 - **LAN Device Name**:  this must match the name you used to identify the cellphone IP you specified in the phonetrack.cfg file; avoid blanks and special characters
 - **LAN Device Address**:  this must be the IP:port address where the **phonetrack app** is running (*not* the cellphone itself).  For example if you have the phonetrack app running on a computer with IP address 192.168.1.200, then the LAN Device Address you must provide is **192.168.1.200:50001**.  The address must include the port number, which by default is 50001 (but can be changed in the phonetrack.cfg file)
 - **Bridge Address**: this must be the IP:port address where the forwarding bridge server is running.  For example if you have the edgebridge app running on a computer with IP address 192.168.1.250, then the Bridge Address you must provide is **192.168.1.250:8088**.  The address must include the port number, which by default is 8088 (but can be changed in an optional edgebridge.cfg file)
+
+### When things get out of synch
+There are situations where, often due to a hub reboot (e.g. firmware updates), the accurate presence state of a phone may get 'stuck' to a certain state.  To overcome these cases, periodically there will be a 'forced' update of the phone's most current status to SmartThings (normally updates are only done when a state *change* occurs).  The net result is, if things do get out of synch for whatever reason, they should resolve themselves in about 30 minutes.
