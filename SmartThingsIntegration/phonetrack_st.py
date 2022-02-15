@@ -90,12 +90,14 @@ class logger(object):
 
 class mobiledevice(object):
 	
-	def __init__(self, ipaddr, name):
+	def __init__(self, ipaddr, name, retries):
 		
 		self.ipaddress = ipaddr
 		self.name = name
+		self.offline_retries = retries
 		self.present = 'unknown'
 		self.notpresentcounter = 0
+		self.skipupdates = 0
 
 	def ping(self):
 
@@ -221,7 +223,10 @@ class httprequest(object):
 
 def presence_changed(requestor, phone):
 	
-	log.hilite (f'{phone.name} Presence changed to = {phone.ispresent()}')
+	if phone.skipupdates > 150:
+		log.info (f'{phone.name} Presence refreshed to = {phone.ispresent()}')
+	else:
+		log.hilite (f'{phone.name} Presence changed to = {phone.ispresent()}')
 	
 	BASEURL = f'http://{BRIDGEADDR}'
 
@@ -261,16 +266,17 @@ log = logger(conoutp, logoutp, LOGFILE, False)
 
 phonelist = parser.get('config', 'phone_ips')
 namelist = parser.get('config', 'phone_names')
+retrylist = parser.get('config', 'phone_offline_retries')
 
 PINGINTERVAL = int(parser.get('config', 'ping_interval'))
-NOTPRESENT_RETRIES = int(parser.get('config', 'offline_retries'))
 
 phones = phonelist.split(',')
 names = namelist.split(',')
+retries = retrylist.split(',')
 
 i = 0
 for phone in phones:
-	DEVICE_LIST.append(mobiledevice(phone.strip(), names[i].strip()))
+	DEVICE_LIST.append(mobiledevice(phone.strip(), names[i].strip(), int(retries[i].strip())))
 	i += 1
 	
 PORTNUMBER = int(parser.get('config', 'port'))
@@ -298,18 +304,24 @@ if scanner.setup():
 				if device.ipaddress in iplist:
 					device.update_presence(True)
 					device.notpresentcounter = 0
-					if priorstate != True:
+					if priorstate != True or device.skipupdates > 150:
 						presence_changed(requestor, device)
+						device.skipupdates = 0
+					else:
+						device.skipupdates += 1
 				
 				else:
 					device.notpresentcounter += 1
 					log.debug (f'\t{device.name}: Not present count = {device.notpresentcounter}')
 					
-					if device.notpresentcounter >= NOTPRESENT_RETRIES:
+					if device.notpresentcounter >= device.offline_retries:
 						device.update_presence(False)
 						device.notpresentcounter = 0
-						if priorstate != False:
+						if priorstate != False or device.skipupdates > 150:
 							presence_changed(requestor, device)
+							device.skipupdates = 0
+						else:
+							device.skipupdates += 1
 					
 			log.info ('Scan complete')
 			time.sleep(PINGINTERVAL-.5)
