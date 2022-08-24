@@ -39,7 +39,7 @@ As an example, 7 retries at 12 second intervals results in a 1 minute 24 second 
 Use the github Issues (https://github.com/toddaustin07/phonepresence/issues) tab for this repository to share your findings.  I'm also interested to see how this works with Android phones.
 
 ## SmartThings Integration
-An alternate version of this application is available that will allow for full integration with SmartThings.  It requires my bridge server (https://github.com/toddaustin07/edgebridge) and LAN Presence Edge driver available at this test channel: https://api.smartthings.com/invitation-web/accept?id=8f025878-71e3-4bb4-bbac-5dd37b1a27eb
+An alternate version of this application is available that will allow for full integration with SmartThings.  It requires my bridge server (https://github.com/toddaustin07/edgebridge) and LAN Presence Edge driver available from my [shared projects channel](https://bestow-regional.api.smartthings.com/invite/d429RZv8m9lo).
 
 It also requires **Python 3.7** or later to be on the computer where you will be running the phonetrack application.  If a Windows .exe file is preferred, please contact me and I can provide that.
 
