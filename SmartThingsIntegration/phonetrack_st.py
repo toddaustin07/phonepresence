@@ -248,7 +248,7 @@ CONFIG_FILE_PATH = os.getcwd() + os.path.sep + CONFIGFILE
 parser = configparser.ConfigParser()
 if not parser.read(CONFIG_FILE_PATH):
 	print (f'\nConfig file is missing ({CONFIG_FILE_PATH})\n')
-	exit(-1)
+	sys.exit(-1)
 	
 if parser.get('config', 'console_output').lower() == 'yes':
 	conoutp = True	
@@ -331,4 +331,4 @@ if scanner.setup():
 		
 else:
 	log.error ('Failed to initialize scanner')
-	exit(-1)
+	sys.exit(-1)
